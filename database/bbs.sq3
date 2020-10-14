@@ -1,0 +1,6 @@
+create table boards(
+    id varchar(10) primary key,
+    name varchar(15) not null,
+    date varchar(15) not null,
+    message varchar(100) not null
+    );

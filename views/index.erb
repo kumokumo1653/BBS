@@ -1,0 +1,24 @@
+<table>
+    <% for i in @begin...@end do%>
+        <tr>
+            <td><%= i + 1%>:</td>
+            <td>投稿者:<%= @comments[i].name %></td>
+            <td>投稿日:<%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
+            <td>ID:<%= @comments[i].id %></td>
+            <form method="post" action="del">
+                <td><input type="submit" value="削除"></td>
+                <input type="hidden" name="id" value="<%= @comments[i].id.to_i %>">
+            </form>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="4"><%= @comments[i].message %></td>
+        </tr>
+    <% end%>
+</table>
+
+<form method="post" action="add">
+    投稿者名:<input type="text" name="name" maxlength="15"></td><br>
+    内容:<input type="text" name="text" maxlength="100"></td>
+    <input type="submit" value="書き込み"></td>
+</form>

@@ -1,7 +1,8 @@
 <table>
+    <% pp @comments[0].name %>
     <% for i in @begin...@end do%>
         <tr>
-            <td><%= i + 1%>:</td>
+            <td><%= i + 1 %>:</td>
             <td>投稿者:<%= @comments[i].name %></td>
             <td>投稿日:<%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
             <td>ID:<%= @comments[i].id %></td>

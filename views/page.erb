@@ -1,44 +1,65 @@
-<table>
-    <% for i in @begin...@end do%>
-        <tr>
-            <td><%= i + 1 %>:</td>
-            <td>投稿者:<%= dispName(@comments[i].name) %></td>
-            <td>投稿日:<%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
-            <td>ID:<%= @comments[i].id %></td>
-            <form method="post" action="del">
-                <td><input type="submit" value="削除"></td>
-                <input type="hidden" name="id" value="<%= @comments[i].id.to_i %>">
-            </form>
-        </tr>
-        <tr>
-            <td></td>
-            <td colspan="4"><%= dispText(@comments[i].message) %></td>
-        </tr>
-    <% end%>
-</table>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>SimpleBBS</title>
+        <link rel="stylesheet" href="page.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
 
-<% if @page != 1 %>
-    <a href=http://127.0.0.1:9998/bbs/1>1</a>
-<% end %>
+    <body>
+        <center>
+            <h1>SimpleBBS</h1>
+        </center>
+        <% if @page != pagePrev(@page) %>
+            <a href=http://127.0.0.1:9998/bbs/<%= pagePrev(@page) %>><<</a>
+        <% end %>
+        <% if @page != 1 %>
+            <a href=http://127.0.0.1:9998/bbs/1>1</a>...
+        <% end %>
 
-<% if @page != pagePrev(@page) %>
-    <a href=http://127.0.0.1:9998/bbs/<%= pagePrev(@page) %>>前ページ</a>
-<% end %>
-<% if @page != pageNext(@page) %>
-    <a href=http://127.0.0.1:9998/bbs/<%= pageNext(@page) %>>次ページ</a>
-<% end %>
-<% if @page != maxPage(@comments.length) %>
-    <a href=http://127.0.0.1:9998/bbs/<%= maxPage(@comments.length) %>><%= maxPage(@comments.length) %></a>
-<% end %>
-<table>
-<form method="post" action="add">
-    <tr>
-        <td>投稿者名:</td><td><input type="text" name="name" maxlength="15"></td>
-    </tr>
-    <tr>
-        <td>内容:</td><td><textarea name="text" cols="40" rows="5" wrap="off"></textarea></td>
-    </tr>
-    <tr>
-        <td><input type="submit" value="書き込み"></td>
-    </tr>
-</form>
+        <% if @page != maxPage(@comments.length) %>
+            <a href=http://127.0.0.1:9998/bbs/<%= maxPage(@comments.length) %>><%= maxPage(@comments.length) %></a>
+        <% end %>
+
+        <% if @page != pageNext(@page) %>
+            <a href=http://127.0.0.1:9998/bbs/<%= pageNext(@page) %>>>></a>
+        <% end %>
+        <% for i in @begin...@end do%>
+            <div class="info">
+                <table>
+                    <tr>
+                        <td><%= i + 1 %>:</td>
+                        <td class="name"><%= dispName(@comments[i].name) %></td>
+                        <td class="date"><%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
+                        <td class="id">ID:<%= @comments[i].id %></td>
+                        <form method="post" action="del">
+                            <td><input type="submit" value="削除"></td>
+                            <input type="hidden" name="id" value="<%= @comments[i].id.to_i %>">
+                        </form>
+                    </tr>
+                </table>
+            </div>
+            <div class="text">
+                <%= dispText(@comments[i].message) %><br>
+            </div>
+        <% end%>
+
+        <div class="inputform">
+            <table>
+                <form method="post" action="add">
+                    <tr>
+                        <td align="right">投稿者名:</td><td><input type="text" name="name" size="30" maxlength="<%= NAME_MAX %>"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">内容:</td><td><textarea name="text" cols="40" rows="5" maxlength="<%= TEXT_MAX %>" wrap="off"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td></td><td align="right"><input type="submit" value="書き込み"></td>
+                    </tr>
+                </form>
+            </table>
+        </div>
+
+    </body>
+</html>

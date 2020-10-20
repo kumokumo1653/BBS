@@ -18,8 +18,21 @@
     <% end%>
 </table>
 
+<% if @page != pagePrev(@page) %>
+    <a href=http://127.0.0.1:9998/<%= pagePrev(@page) %>>前ページ</a>
+<% end %>
+<% if @page != pageNext(@page) %>
+    <a href=http://127.0.0.1:9998/<%= pageNext(@page) %>>次ページ</a>
+<% end %>
+<table>
 <form method="post" action="add">
-    投稿者名:<input type="text" name="name" maxlength="15"></td><br>
-    内容:<input type="text" name="text" maxlength="100"></td>
-    <input type="submit" value="書き込み"></td>
+    <tr>
+        <td>投稿者名:</td><td><input type="text" name="name" maxlength="15"></td>
+    </tr>
+    <tr>
+        <td>内容:</td><td><input type="text" name="text" maxlength="100"></td>
+    </tr>
+    <tr>
+        <td><input type="submit" value="書き込み"></td>
+    </tr>
 </form>

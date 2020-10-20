@@ -13,11 +13,24 @@ def maxPage(len)
     return ((len + PAGE_MAX - 1) / PAGE_MAX)
 end
 
+#前ページ
+def pagePrev(page)
+    if page - 1 < 1
+        return page
+    end
+    return page - 1
+end
+
+#後ページ
+def pageNext(page)
+    if page + 1 > maxPage($msg.msg.length)
+        return page
+    end
+    return page + 1
+end
+
 get '/' do
-    @comments = $msg.msg 
-    @begin = 0
-    @end = @comments.length
-    erb :page
+    redirect '/1'
 end
 
 get '/:page' do
@@ -26,8 +39,8 @@ get '/:page' do
     if (params[:page] =~ /^[0-9]+$/) == 0
         @page = params[:page].to_i
     else
-        puts "errornum"
-        redirect '/'
+        erb :error
+        return
     end
 
     #ページの範囲内か
@@ -43,6 +56,7 @@ get '/:page' do
         end
         erb :page
     else
+        erb :error
         puts "error"
     end
 end
@@ -52,22 +66,25 @@ post '/add' do
     text = params[:text]
 
     if name.length >= NAME_MAX
+        erb :error
         puts "error"
     end 
 
     if text.length >= TEXT_MAX
+        erb :error
         puts "error"
     end 
 
     $msg.add(name, text)
 
-    redirect '/'
+    redirect "/#{maxPage($msg.msg.length)}"
 end
 
 post '/del' do
     id = params[:id]
 
     if $msg.del(id.to_s.rjust(ID_MAX,"0")) == "error"
+        erb :error
         puts "error"
     end
     redirect '/'

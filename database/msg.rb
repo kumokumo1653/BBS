@@ -50,9 +50,13 @@ class Msg
 
         puts "username = #{username}"
         puts "message = #{message}"
+        if username.length == 0
+            username = "ななし"
+        end
         if message.length >= 100
             return
         end
+        
         
 
         s = Board.new

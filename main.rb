@@ -1,16 +1,29 @@
 require 'sinatra'
 require './database/msg/'
+require 'cgi/escape'
 set :environment, :production
 
 NAME_MAX = 15
 ID_MAX = 4
-TEXT_MAX = 100
+TEXT_MAX = 500
 PAGE_MAX = 5
 $msg = Msg.new
 
+#数字かどうか
+def isNumber(id)
+    return id =~ /^[0-9]+$/
+end
+#空文字かどうか
+def isEmpty(text)
+    return text =~ /\A(\s)*\z/ 
+end
 #投稿件数から最大ページを求める
 def maxPage(len)
-    return ((len + PAGE_MAX - 1) / PAGE_MAX)
+    if len == 0
+        return 1
+    else
+        return ((len + PAGE_MAX - 1) / PAGE_MAX)
+    end
 end
 
 #前ページ
@@ -29,24 +42,44 @@ def pageNext(page)
     return page + 1
 end
 
-get '/' do
-    redirect '/1'
+def dispName(name)
+    return CGI.escapeHTML(name)
+end
+def dispText(text)
+    text = CGI.escapeHTML(text)
+
+    #改行の置換
+    text = text.gsub(/(\r\n|\n|\r)/, '<br>')
+
+    #fontタグを許可
+    text = text.gsub(/&lt;\/font&gt;/,'</font>')
+    while (text =~/&lt;font.*?&gt;/) != nil do
+        text = text.sub(/&lt;font.*?&gt;/,(text[/&lt;font.*?&gt;/].to_s.gsub(/&quot;/, '"')).sub(/&lt;font(.*?)&gt;/,'<font \1>'))
+    end
+    
+    return text
 end
 
-get '/:page' do
+get '/' do
+    redirect '/bbs/1'
+end
+
+get '/bbs/error' do
+    erb :error
+end
+get '/bbs/:page' do
     @comments = $msg.msg 
     #数字かどうか
-    if (params[:page] =~ /^[0-9]+$/) == 0
+    if isNumber(params[:page]) == 0
         @page = params[:page].to_i
     else
-        erb :error
-        return
+        puts "notnum"
+        redirect '/bbs/error'
     end
 
     #ページの範囲内か
     @minpage = 1
     @maxpage = maxPage(@comments.length)
-    puts @maxpage
     if @page >= @minpage.to_i && @page <= @maxpage.to_i 
         @begin = (@page - 1) * PAGE_MAX
         if @page == @maxpage.to_i
@@ -56,36 +89,43 @@ get '/:page' do
         end
         erb :page
     else
-        erb :error
-        puts "error"
+        puts "outnum"
+        redirect '/bbs/error'
     end
 end
 
-post '/add' do
+post '/bbs/add' do
     name = params[:name]
     text = params[:text]
 
-    if name.length >= NAME_MAX
-        erb :error
+    puts(text.length)
+    if name.length >= NAME_MAX || text.length >= TEXT_MAX  
+        redirect '/bbs/error'
         puts "error"
-    end 
+    else
+        #空文字判定
+        if isEmpty(text) == 0 
+            redirect '/bbs/error'
+            puts "error"
+        else
 
-    if text.length >= TEXT_MAX
-        erb :error
-        puts "error"
-    end 
+            $msg.add(name, text)
 
-    $msg.add(name, text)
-
-    redirect "/#{maxPage($msg.msg.length)}"
+            redirect "/bbs/#{maxPage($msg.msg.length)}"
+        end
+    end
 end
 
-post '/del' do
+post '/bbs/del' do
     id = params[:id]
-
-    if $msg.del(id.to_s.rjust(ID_MAX,"0")) == "error"
-        erb :error
-        puts "error"
+    if isNumber(id) == 0
+        if $msg.del(id.to_s.rjust(ID_MAX,"0")) == "error"
+            redirect '/bbs/error'
+            puts "error"
+        end
+        redirect '/'
+    else 
+        erb :errpr
+        puts "errpr"
     end
-    redirect '/'
 end

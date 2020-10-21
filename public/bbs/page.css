@@ -24,8 +24,14 @@
     font-size: 15pt;
 }
 .button {
+    border: none;
+    border-radius: 10%;
+    padding: 2px 5px;
     color: #b1c5de;
     background: #2c7cde;
+}
+.input{
+    border: none;
 }
 .trans a{
     color: #2c7cde;

@@ -7,6 +7,7 @@ ActiveRecord::Base.establish_connection :development
 
 class Board < ActiveRecord::Base
 end
+
 class Msg
     def initialize
         @data = Board.all
@@ -36,13 +37,6 @@ class Msg
                 break
             end
         end
-        if @id >= 10000
-            data = Board.all.sort do |a, b|
-                a.date.to_i <=> b.date.to_i
-            end
-            @id = data[0].to_i
-            data[0].destroy
-        end
         return @id
     end
 
@@ -50,17 +44,25 @@ class Msg
 
         puts "username = #{username}"
         puts "message = #{message}"
+        puts TEXT_MAX
         if username.length == 0
             username = "ななし"
         end
-        if message.length >= 100
+        if message.length > TEXT_MAX
             return
         end
         
+        if @id >= 10**ID_MAX
+            data = Board.all.sort do |a, b|
+                a.date.to_i <=> b.date.to_i
+            end
+            @id = data[0].id.to_i
+            data[0].destroy
+        end
         
 
         s = Board.new
-        s.id = @id.to_s.rjust(4,"0")
+        s.id = @id.to_s.rjust(ID_MAX,"0")
         s.name = username
         s.date = Time.now.to_i
         s.message = message

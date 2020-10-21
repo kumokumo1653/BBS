@@ -19,3 +19,15 @@
     padding-right: 20px;
     font-size: 15pt;
 }
+
+.trans {
+    font-size: 15pt;
+}
+.button {
+    color: #b1c5de;
+    background: #2c7cde;
+}
+.trans a{
+    color: #2c7cde;
+    text-decoration: none;
+}

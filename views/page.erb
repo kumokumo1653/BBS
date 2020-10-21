@@ -11,20 +11,40 @@
         <center>
             <h1>SimpleBBS</h1>
         </center>
-        <% if @page != pagePrev(@page) %>
-            <a href=http://127.0.0.1:9998/bbs/<%= pagePrev(@page) %>><<</a>
-        <% end %>
-        <% if @page != 1 %>
-            <a href=http://127.0.0.1:9998/bbs/1>1</a>...
-        <% end %>
+        <center>
+            <div class="trans">
+                <% if @page != pagePrev(@page) %>
+                    <a href=http://127.0.0.1:9998/bbs/<%= pagePrev(@page) %>>«</a>
+                <% end %>
+                <% if @page != 1 %>
+                    <a href=http://127.0.0.1:9998/bbs/1>1</a>
+                <% end %>
+                
+                <% if pagePrev(@page) != 1 %>
+                    <% if pagePrev(@page) != 2 %>
+                        ...
+                    <%end%>
+                    <a href=http://127.0.0.1:9998/bbs/<%= pagePrev(@page) %>><%= pagePrev(@page)%></a>
+                <% end %>
+                
+                <%= @page%>
 
-        <% if @page != maxPage(@comments.length) %>
-            <a href=http://127.0.0.1:9998/bbs/<%= maxPage(@comments.length) %>><%= maxPage(@comments.length) %></a>
-        <% end %>
+                <% if pageNext(@page) != maxPage(@comments.length) %>
+                    <a href=http://127.0.0.1:9998/bbs/<%= pageNext(@page) %>><%= pageNext(@page)%></a>
+                    <% if pageNext(@page) != maxPage(@comments.length) - 1 %>
+                        ...
+                    <%end%>
+                <% end %>
 
-        <% if @page != pageNext(@page) %>
-            <a href=http://127.0.0.1:9998/bbs/<%= pageNext(@page) %>>>></a>
-        <% end %>
+                <% if @page != maxPage(@comments.length) %>
+                    <a href=http://127.0.0.1:9998/bbs/<%= maxPage(@comments.length) %>><%= maxPage(@comments.length) %></a>
+                <% end %>
+
+                <% if @page != pageNext(@page) %>
+                    <a href=http://127.0.0.1:9998/bbs/<%= pageNext(@page) %>>»</a>
+                <% end %>
+            </div>
+        </center>
         <% for i in @begin...@end do%>
             <div class="info">
                 <table>
@@ -34,7 +54,7 @@
                         <td class="date"><%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
                         <td class="id">ID:<%= @comments[i].id %></td>
                         <form method="post" action="del">
-                            <td><input type="submit" value="削除"></td>
+                            <td><input type="submit" class="button" value="削除"></td>
                             <input type="hidden" name="id" value="<%= @comments[i].id.to_i %>">
                         </form>
                     </tr>
@@ -45,17 +65,17 @@
             </div>
         <% end%>
 
-        <div class="inputform">
+        <div class="input">
             <table>
                 <form method="post" action="add">
                     <tr>
-                        <td align="right">投稿者名:</td><td><input type="text" name="name" size="30" maxlength="<%= NAME_MAX %>"></td>
+                        <td align="right">投稿者名:</td><td><input type="text" name="name" size="38" maxlength="<%= NAME_MAX %>"></td>
                     </tr>
                     <tr>
                         <td align="right">内容:</td><td><textarea name="text" cols="40" rows="5" maxlength="<%= TEXT_MAX %>" wrap="off"></textarea></td>
                     </tr>
                     <tr>
-                        <td></td><td align="right"><input type="submit" value="書き込み"></td>
+                        <td></td><td align="right"><input class="button" type="submit" value="書き込み"></td>
                     </tr>
                 </form>
             </table>

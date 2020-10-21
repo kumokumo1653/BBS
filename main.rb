@@ -53,9 +53,7 @@ def dispText(text)
 
     #fontタグを許可
     text = text.gsub(/&lt;\/font&gt;/,'</font>')
-    while (text =~/&lt;font.*?&gt;/) != nil do
-        text = text.sub(/&lt;font.*?&gt;/,(text[/&lt;font.*?&gt;/].to_s.gsub(/&quot;/, '"')).sub(/&lt;font(.*?)&gt;/,'<font \1>'))
-    end
+    text = text.gsub(/&lt;font.*?&gt;/){$&.gsub(/&quot;/, '"').sub(/&lt;font(.*?)&gt;/,'<font \1>')}
     
     return text
 end

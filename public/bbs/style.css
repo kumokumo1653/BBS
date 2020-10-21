@@ -2,5 +2,7 @@ html{
     background: #b1c5de;
 }
 h1{
+    padding-bottom: .5em;
+    border-bottom: 2px solid #2c7cde;
     color:#2c7cde;
 }

@@ -1,4 +1,3 @@
-require 'digest/md5'
 require 'active_record'
 require 'time'
 
@@ -11,17 +10,8 @@ end
 class Msg
     def initialize
         @data = Board.all
-        @data = @data.sort do |a, b|
-            a.id.to_i <=> b.id.to_i
-        end
         @id = 1
-        for i in @data do
-            if i.id.to_i == @id
-                @id += 1
-            else 
-                break
-            end
-        end
+        @id = init
     end
 
     def init

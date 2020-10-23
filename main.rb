@@ -95,10 +95,11 @@
     post '/bbs/add' do
         name = params[:name].slice(0, NAME_MAX)
         text = params[:text].slice(0, TEXT_MAX)
-        puts text
-        puts text.length
 
     #空文字判定
+    if isEmpty(name) == 0
+        name = ""
+    end
     if isEmpty(text) == 0 
     else
         $msg.add(name, text)

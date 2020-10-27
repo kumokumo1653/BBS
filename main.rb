@@ -3,9 +3,6 @@
     require 'cgi/escape'
     set :environment, :production
 
-    NAME_MAX = 15
-    ID_MAX = 4
-    TEXT_MAX = 500
     PAGE_MAX = 5
     $msg = Msg.new
 
@@ -71,7 +68,6 @@
         if isNumber(params[:page]) == 0
             @page = params[:page].to_i
         else
-            puts "notnum"
             redirect '/bbs/error'
         end
 
@@ -87,18 +83,17 @@
             end
             erb :page
         else
-            puts "outnum"
             redirect '/bbs/error'
         end
     end
 
-    post '/bbs/add' do
+post '/bbs/add' do
         name = params[:name].slice(0, NAME_MAX)
         text = params[:text].slice(0, TEXT_MAX)
 
     #空文字判定
     if isEmpty(name) == 0
-        name = ""
+        name = "ななし"
     end
     if isEmpty(text) == 0 
     else
@@ -109,11 +104,9 @@ end
 
 post '/bbs/del' do
     id = params[:id]
-    puts id
     if isNumber(id) == 0
         if $msg.del(id.to_s.rjust(ID_MAX,"0")) == "error"
             redirect '/bbs/error'
-            puts "error"
         end
         redirect '/'
     else 

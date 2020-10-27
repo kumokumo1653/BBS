@@ -4,6 +4,10 @@ require 'time'
 ActiveRecord::Base.configurations = YAML.load_file('./database/database.yml')
 ActiveRecord::Base.establish_connection :development
 
+NAME_MAX = 15
+ID_MAX = 4
+TEXT_MAX = 500
+
 class Board < ActiveRecord::Base
 end
 
@@ -34,7 +38,7 @@ class Msg
 
         puts "username = #{username}"
         puts "message = #{message}"
-        puts TEXT_MAX
+        
         if username.length == 0
             username = "ななし"
         end
@@ -43,9 +47,7 @@ class Msg
         end
         
         if @id >= 10**ID_MAX
-            data = Board.all.sort do |a, b|
-                a.date.to_i <=> b.date.to_i
-            end
+            data = Board.all
             @id = data[0].id.to_i
             data[0].destroy
         end

@@ -6,7 +6,7 @@ ActiveRecord::Base.establish_connection :development
 
 NAME_MAX = 15
 ID_MAX = 4
-TEXT_MAX = 500
+TEXT_MAX = 100
 
 class Board < ActiveRecord::Base
 end

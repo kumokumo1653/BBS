@@ -8,10 +8,12 @@
 
     #数字かどうか
     def isNumber(id)
+        id = id.encode("UTF-8", "UTF-8", :invalid => :replace, :undef => :replace, :replace => '?')
         return id =~ /^[0-9]+$/
     end
     #空文字かどうか
     def isEmpty(text)
+        text = text.encode("UTF-8", "UTF-8", :invalid => :replace, :undef => :replace, :replace => '?')
         return text =~ /\A[　\s]*\z/ 
     end
     #投稿件数から最大ページを求める
@@ -49,8 +51,7 @@
         text = text.gsub(/(\r\n|\n|\r)/, '<br>')
 
         #fontタグを許可
-        text = text.gsub(/&lt;\/font&gt;/,'</font>')
-        text = text.gsub(/&lt;font.*?&gt;/){$&.gsub(/&quot;/, '"').sub(/&lt;font(.*?)&gt;/,'<font \1>')}
+        text = text.gsub(/&lt;font.*?&gt;.*?&lt;\/font&gt;/){$&.gsub(/&quot;/, '"').sub(/&lt;font(.*?)&gt;(.*?)&lt;\/font&gt;/,'<font \1>\2</font>')}
         
         return text
     end
@@ -88,8 +89,10 @@
     end
 
 post '/bbs/add' do
-        name = params[:name].slice(0, NAME_MAX)
-        text = params[:text].slice(0, TEXT_MAX)
+    puts name
+    puts text
+    name = params[:name].slice(0, NAME_MAX)
+    text = params[:text].slice(0, TEXT_MAX)
 
     #空文字判定
     if isEmpty(name) == 0

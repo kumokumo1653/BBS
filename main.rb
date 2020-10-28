@@ -12,7 +12,7 @@
     end
     #空文字かどうか
     def isEmpty(text)
-        return text =~ /\A(\s)*\z/ 
+        return text =~ /\A[　\s]*\z/ 
     end
     #投稿件数から最大ページを求める
     def maxPage(len)

@@ -51,7 +51,7 @@
                     <tr>
                         <td><%= i + 1 %>:</td>
                         <td class="name"><%= dispName(@comments[i].name) %></td>
-                        <td class="date"><%= Time.at(@comments[i].date.to_i).strftime("%Y/%m/%d %H:%M:%S")%></td>
+                        <td class="date"><%= Time.at(@comments[i].date).strftime("%Y/%m/%d %H:%M:%S")%></td>
                         <td class="id">ID:<%= @comments[i].id %></td>
                         <form method="post" action="del">
                             <td><input type="submit" class="button" value="削除"></td>
@@ -69,10 +69,10 @@
             <table>
                 <form method="post" action="add">
                     <tr>
-                        <td align="right">投稿者名:</td><td><input type="text" name="name" size="38" maxlength="<%= NAME_MAX %>"></td>
+                        <td align="right"><label for="name">投稿者名(15文字以内):</label></td><td><input type="text" name="name" size="38" maxlength="<%= NAME_MAX %>" id="name"></td>
                     </tr>
                     <tr>
-                        <td align="right">内容:</td><td><textarea name="text" cols="40" rows="5" maxlength="<%= TEXT_MAX %>" wrap="off"></textarea></td>
+                        <td align="right"><label for="content">内容(500字以内):</label></td><td><textarea name="text" cols="40" rows="5" maxlength="<%= TEXT_MAX %>" wrap="off" id="content" required></textarea></td>
                     </tr>
                     <tr>
                         <td></td><td align="right"><input class="button" type="submit" value="書き込み"></td>

@@ -6,7 +6,8 @@ ActiveRecord::Base.establish_connection :development
 
 NAME_MAX = 15
 ID_MAX = 4
-TEXT_MAX = 100
+DATE_MAX = 15
+TEXT_MAX = 500
 
 class Board < ActiveRecord::Base
 end
@@ -45,7 +46,13 @@ class Msg
         if message.length > TEXT_MAX
             return
         end
-        
+        if username.length > NAME_MAX
+            return
+        end
+        if Time.now.to_i > 2 ** 64
+            return
+        end
+                
         if @id >= 10**ID_MAX
             data = Board.all
             @id = data[0].id.to_i
@@ -83,9 +90,5 @@ class Msg
     
     def msg
         return Board.all
-    end
-
-    def clear
-        Board.where(id:1..Board.all.length).destroy_all
     end
 end

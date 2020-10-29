@@ -6,7 +6,6 @@ ActiveRecord::Base.establish_connection :development
 
 NAME_MAX = 15
 ID_MAX = 4
-DATE_MAX = 15
 TEXT_MAX = 500
 
 class Board < ActiveRecord::Base
@@ -45,8 +44,12 @@ class Msg
         end
         if message.length > TEXT_MAX
             return
+        elsif message.bytesize > TEXT_MAX * 4
+            return
         end
         if username.length > NAME_MAX
+            return
+        elsif username.bytesize > NAME_MAX * 4
             return
         end
         if Time.now.to_i > 2 ** 64

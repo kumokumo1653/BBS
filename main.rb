@@ -91,8 +91,6 @@
 post '/bbs/add' do
     name = params[:name].slice(0, NAME_MAX)
     text = params[:text].slice(0, TEXT_MAX)
-    puts name
-    puts text
 
     #空文字判定
     if isEmpty(name) == 0
